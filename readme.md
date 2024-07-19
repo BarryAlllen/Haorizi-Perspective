@@ -19,3 +19,10 @@
 * 在图片上点击鼠标左键选择点，选择四个点之后，则会将透视矫正的图片保存到目标目录中。
 
 * 选点过程中，点击鼠标右键则可终端选点操作，重新进行选点。
+
+## 4. 👍效果
+* 拍摄图片
+<div align=center><img width="50%" height="50%" src="./assets/readme3.jpg"/></div>
+
+* 矫正效果（屏幕拍摄原因，图片原本就模糊）
+<div align=center><img width="50%" height="50%" src="./assets/readme4.jpg"/></div>

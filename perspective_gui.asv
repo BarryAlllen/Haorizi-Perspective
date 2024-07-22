@@ -133,7 +133,7 @@ function perspective_gui()
             currentIndex = 1;
             displayCurrentImage();
         else
-            warndlg('没有找到图片！', 'Warning');
+            warndlg('You are about to delete a file', 'Warning');
             disp('No images found in the directory.');
         end
     end

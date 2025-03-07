@@ -76,11 +76,33 @@ function perspective_gui()
         set(currentImageDisplay, 'String', sprintf('%d / %d', currentIndex, totalImages));
     end
 
+    % 设置存储目录路径的文件名
+    settingsFile = 'lastSelectDir.mat';
+
+    % 尝试从文件中加载上次选择的目录路径
+    if exist(settingsFile, 'file')
+        loadedData = load(settingsFile);
+        if isfield(loadedData, 'lastSelectDir') && isfolder(loadedData.lastSelectDir)
+            lastSelectDir = loadedData.lastSelectDir;
+        else
+            lastSelectDir = ''; % 如果文件损坏或路径无效，则使用默认值
+        end
+    else
+        lastSelectDir = ''; % 如果文件不存在，则使用默认值
+    end
+
     function selectSourceDir(~, ~)
         % 选择源目录
-        folder_name = uigetdir;
+        if ~isempty(lastSelectDir) && isfolder(lastSelectDir)
+            folder_name = uigetdir(lastSelectDir); % 使用上次路径作为起始路径
+        else
+            folder_name = uigetdir;
+        end
         if folder_name ~= 0
             set(sourceDirEdit, 'String', folder_name);
+            set(targetDirEdit, 'String', folder_name);
+            lastSelectDir = folder_name; % 保存当前选择的路径
+            save(settingsFile, 'lastSelectDir'); % 保存到文件
             refreshImageList(folder_name);
             set(default_status, 'Visible', 'off');
             set([processedCount_label, processedCountDisplay, currentImage_label, currentImageDisplay, fileName_label, fileNameDisplay, chooseButton], 'Visible', 'on');
@@ -92,9 +114,15 @@ function perspective_gui()
 
     function selectTargetDir(~, ~)
         % 选择目标目录
-        folder_name = uigetdir;
+        if ~isempty(lastSelectDir) && isfolder(lastSelectDir)
+            folder_name = uigetdir(lastSelectDir); % 使用上次路径作为起始路径
+        else
+            folder_name = uigetdir;
+        end
         if folder_name ~= 0
             set(targetDirEdit, 'String', folder_name);
+            lastSelectDir = folder_name; % 保存当前选择的路径
+            save(settingsFile, 'lastSelectDir'); % 保存到文件
             enableButtonsIfReady();
         end
     end
@@ -206,7 +234,7 @@ function perspective_gui()
 
             for p = 1:4
                 while true
-                    [x, y, button] = ginput(1);
+                    [x, y, button] = zginput(1);
                     if button == 3
                         delete(pointHandles(pointHandles ~= 0));
                         set([sourceButton, targetButton, prevButton, nextButton, processButton, rotateButton, chooseButton], 'Enable', 'on');

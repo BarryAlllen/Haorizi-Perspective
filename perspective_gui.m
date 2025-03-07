@@ -18,7 +18,7 @@ function perspective_gui()
     fileName_label = uicontrol('Parent', statusPanel, 'Style', 'text', 'String', '文件名:', 'Units', 'normalized', 'Position', [0.46, 0.1, 0.07, 0.72], 'FontSize', 12, 'Visible', 'off');
     fileNameDisplay = uicontrol('Parent', statusPanel, 'Style', 'text', 'String', '', 'ForegroundColor', [0 0 0.7], 'Units', 'normalized', 'Position', [0.535, 0.1, 0.2, 0.72], 'FontSize', 12, 'HorizontalAlignment', 'left', 'Visible', 'off');
 
-    chooseButton = uicontrol('Parent', statusPanel, 'Style', 'pushbutton', 'String', '选择图片', 'Units', 'normalized', 'Position', [0.901, 0.1, 0.09, 0.85], 'FontSize', 11, 'Visible', 'off', 'Callback', @jumpToImage);
+    chooseButton = uicontrol('Parent', statusPanel, 'Style', 'pushbutton', 'String', '选择序号', 'Units', 'normalized', 'Position', [0.901, 0.1, 0.09, 0.85], 'FontSize', 11, 'Visible', 'off', 'Callback', @jumpToImage);
 
     % 控制面板中的目录路径按钮和编辑框
     sourceButton = uicontrol('Parent', controlPanel, 'Style', 'pushbutton', 'String', '选择源目录', 'FontSize', 11, 'Units', 'normalized', 'Position', [0.01, 0.55, 0.15, 0.4], 'Callback', @selectSourceDir);
@@ -85,6 +85,8 @@ function perspective_gui()
             set(default_status, 'Visible', 'off');
             set([processedCount_label, processedCountDisplay, currentImage_label, currentImageDisplay, fileName_label, fileNameDisplay, chooseButton], 'Visible', 'on');
             enableButtonsIfReady();
+            processedCount = 0;
+            updateStatusInfo();
         end
     end
 
@@ -139,7 +141,7 @@ function perspective_gui()
         end
 
         if currentIndex <= 1
-            displayCurrentImage()
+            displayCurrentImage();
         end
     end
 
@@ -151,7 +153,7 @@ function perspective_gui()
         end
 
         if currentIndex >= numel(imageList)
-            displayCurrentImage()
+            displayCurrentImage();
         end
     end
 
@@ -234,6 +236,8 @@ function perspective_gui()
             delete(pointHandles(pointHandles ~= 0));
         end
         set([sourceButton, targetButton, prevButton, nextButton, processButton, rotateButton, chooseButton], 'Enable', 'on');
+        displayCurrentImage();
+        pause(0.5);
         nextImage();
     end
 

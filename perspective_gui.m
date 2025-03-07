@@ -137,6 +137,10 @@ function perspective_gui()
             currentIndex = currentIndex - 1;
             displayCurrentImage();
         end
+
+        if currentIndex <= 1
+            displayCurrentImage()
+        end
     end
 
     function nextImage(~, ~)
@@ -144,6 +148,10 @@ function perspective_gui()
         if currentIndex < numel(imageList)
             currentIndex = currentIndex + 1;
             displayCurrentImage();
+        end
+
+        if currentIndex >= numel(imageList)
+            displayCurrentImage()
         end
     end
 
